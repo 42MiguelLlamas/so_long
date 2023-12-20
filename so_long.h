@@ -5,6 +5,8 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
+# include "gnl/get_next_line.h"
+# include "libft/libft.h"
 # include <math.h>
 # include <mlx.h>
 
@@ -14,6 +16,10 @@ typedef struct	s_data {
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	char	**map;
 }				t_data;
+
+void    ft_exit(void);
+void    check_map(int fd, t_data *map);
 
 #endif

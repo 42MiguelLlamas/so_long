@@ -6,29 +6,34 @@
 #    By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/19 17:20:49 by mllamas-          #+#    #+#              #
-#    Updated: 2023/12/19 18:46:10 by mllamas-         ###   ########.fr        #
+#    Updated: 2023/12/20 01:02:05 by mllamas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
-SRCS = main.c
+SRCS = main.c check_map.c gnl/get_next_line.c gnl/get_next_line_utils.c
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -Wextra -Werror -Imlx
+CFLAGS = -Wall -Wextra -Werror
+CC = cc
+LIBFT = libft/libft.a
 
 .PHONY: all clean fclean re
 
 all: $(NAME)
 
-%.o: %.c so_long.h
+%.o: %.c 
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(LIBFT):
+	make -C libft/
 clean:
 	rm -f $(OBJS)
+	make -C libft/ fclean
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -lmlx -framework OpenGL -framework AppKit -o $(NAME) $(OBJS)
+$(NAME): $(OBJS) libft/libft.a
+	$(CC) $(CFLAGS) -Imlx -lmlx -framework OpenGL -framework AppKit -o $(NAME) $(OBJS) $(LIBFT)
