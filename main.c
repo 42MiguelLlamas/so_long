@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:59:51 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/20 01:56:24 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/20 11:16:00 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "so_long.h"
@@ -74,16 +74,14 @@ void destroy_hook(t_vars *vars)
     exit(0); // Termina el programa
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	t_vars	vars;
-	int		fd;
 	t_data	game;
+	t_vars	vars;
 
-	fd = open("map.ber", O_RDONLY);
-	if (fd < 0)
+	if (argc != 2)
 		ft_exit();
-	check_map(fd, &game);
+	check_map(argv[1], &game);
 	vars.mlx = mlx_init();
 	vars.win = mlx_new_window(vars.mlx, 1920, 1080, "Hello world!");
 	mlx_key_hook(vars.win, closfe, &vars);

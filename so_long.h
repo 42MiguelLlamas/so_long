@@ -20,6 +20,6 @@ typedef struct	s_data {
 }				t_data;
 
 void    ft_exit(void);
-void    check_map(int fd, t_data *map);
+void    check_map(char *file, t_data *game);
 
 #endif
