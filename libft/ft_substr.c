@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:21:22 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/09/27 17:27:18 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/22 12:14:04 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -31,7 +31,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	{
 		str[i] = s[start + i];
 		i++;
-	}	
+	}
 	str[i] = '\0';
 	return (str);
 }

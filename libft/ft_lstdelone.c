@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 11:12:55 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/09/28 11:19:41 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/22 12:14:22 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -18,4 +18,4 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*))
 		(*del)(lst->content);
 		free(lst);
 	}
-}		
+}

@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 22:49:01 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/20 11:15:57 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/22 17:30:20 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,6 @@ void	ft_exit(void)
 {
 	write (1, "Error\n", 6);
 	exit(0);
-}
-
-void	check_middle(char *line, size_t len)
-{
-	size_t	i;
-
-	if (ft_strlen(line) != len)
-		ft_exit();
-	if (line[0] != 49 || line[len - 2] != 49)
-		ft_exit();
-	i = 0;
-	while (i < len - 1)
-	{
-		if (!(line[i] == 48 || line[i] == 49 || line[i] == 67 || 
-				line[i] == 69 || line[i] == 80))
-			ft_exit ();
-		i++;
-	}
-}
-
-void	check_updown(char *line, size_t len)
-{
-	int	i;
-
-	if (ft_strlen(line) != len || len < 3)
-		ft_exit();
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] != 49 && line[i] != 10)
-			ft_exit();
-		i++;
-	}
 }
 
 void	ft_free(char **map)
@@ -64,16 +31,40 @@ void	ft_free(char **map)
 	free(map);
 }
 
-void	fill_map(t_data *game, int lines, char *file)
+void	count_rows(t_data *game)
+{
+	char	*line;
+	int		count;
+	int		fd;
+
+	fd = open(game->mapname, O_RDONLY);
+	if (fd < 0)
+		ft_exit();
+	line = get_next_line(fd);
+	game->cols = (int)ft_strlen(line);
+	count = 0;
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+		count++;
+	}
+	game->rows = count;
+	close(fd);
+	if (game->cols < 3 || count < 3)
+		ft_exit();
+}
+
+void	fill_map(t_data *game)
 {
 	int		fd;
 	char	*line;
 	int		i;
 
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
+	if (game->rows < 3)
 		ft_exit();
-	game->map = (char **)malloc(sizeof(char *) * (lines + 1));
+	fd = open(game->mapname, O_RDONLY);
+	game->map = (char **)malloc(sizeof(char *) * (game->rows + 1));
 	if (!game->map)
 		ft_exit();
 	line = get_next_line(fd);
@@ -92,43 +83,216 @@ void	fill_map(t_data *game, int lines, char *file)
 	game->map[i] = line;
 }
 
-void print_map(char **map)
+void	count_elements(char *mapi, t_data *game, int i)
+{
+	int	j;
+
+	j = 0;
+	while (mapi[i])
+	{
+		if (mapi[i] == 'C')
+			game->coinsnum++;
+		else if (mapi[i] == 'E')
+		{
+			game->goalx = i;
+			game->goaly = j;
+			game->goalnum++;
+		}
+		else if (mapi[i] == 'P')
+		{
+			game->playery = i;
+			game->playerx= j;
+			game->playernum++;
+		}
+		i++;
+	}
+}
+
+void	check_first(char *line, int len, t_data *game)
+{
+	int	i;
+
+	if ((int)ft_strlen(line) != len)
+	{
+		ft_free(game->map);
+		ft_exit();
+	}
+	i = 0;
+	while (i < len - 1)
+	{
+		if (line[i] != 49)
+		{
+			ft_free(game->map);
+			ft_exit();
+		}
+		i++;
+	}
+}
+
+void	check_middle(char *line, int len, t_data *game)
+{
+	int	i;
+
+	if ((int)ft_strlen(line) != len)
+	{
+		ft_free(game->map);
+		ft_exit();
+	}
+	if (line[0] != 49 || line[len - 2] != 49)
+	{
+		ft_free(game->map);
+		ft_exit();
+	}
+	i = 0;
+	while (i < len - 1)
+	{
+		if (!(line[i] == 48 || line[i] == 49 || line[i] == 67
+				|| line[i] == 69 || line[i] == 80))
+		{
+			ft_free(game->map);
+			ft_exit ();
+		}
+		i++;
+	}
+}
+
+void	check_last(char *line, int len, t_data *game)
+{
+	int	i;
+
+	if ((int)ft_strlen(line) != len && (int)ft_strlen(line) != len - 1)
+	{
+		ft_free(game->map);
+		ft_exit();
+	}
+	i = 0;
+	while (i < len - 1)
+	{
+		if (line[i] != 49)
+		{
+			ft_free(game->map);
+			ft_exit();
+		}
+		i++;
+	}
+}
+
+void	check_map_components(t_data *game)
+{
+	int	i;
+
+	i = 0;	
+	while (game->map[i])
+	{
+		count_elements(game->map[i], game, i);
+		i++;
+	}
+	if (game->coinsnum < 1 || game->playernum != 1 || game->goalnum != 1)
+	{
+		ft_free(game->map);
+		ft_exit();
+	}
+	i = 0;
+	check_first(game->map[i++],game->cols, game);
+	while (i < game->rows - 1)
+	{
+		check_middle(game->map[i], game->cols, game);
+		i++;
+	}
+	check_last(game->map[i], game->cols, game);
+}
+
+void	print_map(char **map)
 {
 	int	i;
 
 	i = 0;
-    while (map[i])
-   	{
-        printf("%s", map[i]);
-        i++;
-    }
+	while (map[i])
+	{
+		printf("%s", map[i]);
+		i++;
+	}
 }
 
-void	check_map(char *file, t_data *game)
+void	ft_freeint(int	**mapchecker, int rows)
 {
-	char	*line;
-	size_t	line_length;
-	int		count;
-	int		fd;
+	int	i;
 
-	if (strncmp(".ber", file + ft_strlen(file) - 4, 4) != 0)
-		ft_exit();
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		ft_exit();
-	line = get_next_line(fd);
-	line_length = ft_strlen(line);
-	check_updown(line, line_length);
-	count = 0;
-	while (line)
+	i = 0;
+	while (i < rows)
 	{
-		check_middle(line, line_length);
-		free(line);
-		line = get_next_line(fd);
-		count++;
+		free(mapchecker[i]);
+		i++;
 	}
-	close(fd);
-	fill_map(game, count, file);
-	print_map(game->map);
-	//check_elements(&game, count, line_length, file);
+	free(mapchecker);
+}
+
+void	fill_mapchecker(t_data *game)
+{
+	int		i;
+
+	game->mapchecker = malloc(sizeof(char *) * (game->rows));
+	if (!game->mapchecker)
+	{
+		ft_free(game->map);
+		ft_exit();
+	}
+	i = 0;
+	while (i++ < game->cols)
+	{
+		game->mapchecker[i] =ft_calloc((game->cols), sizeof(char));
+		if (!game->mapchecker[i])
+		{
+			ft_freeint(game->mapchecker, game->rows);
+			ft_free(game->map);
+			ft_exit();
+		}
+	}
+}
+
+void	check_mapchecker(t_data *game, int row, int col)
+{
+	if (game->map[row][col] == 1 || game->mapchecker[row][col] == 1)
+		return;
+	if (game->map[row][col] == 'C')
+		game->coinscheck++;
+	if (game->map[row][col] == 'E')
+		game->goalscheck++;
+	game->mapchecker[row][col] = 1;
+	check_mapchecker(game, row + 1, col);
+	check_mapchecker(game, row - 1, col);
+	check_mapchecker(game, row, col + 1);
+	check_mapchecker(game, row, col - 1);
+}
+
+void	check_map_path(t_data *game)
+{
+	if (game->goalscheck != game->goalnum)
+	{
+		ft_freeint(game->mapchecker, game->rows);
+		ft_free(game->map);
+		ft_exit();
+	}
+	if (game->coinscheck != game->coinsnum)
+	{
+		ft_freeint(game->mapchecker, game->rows);
+		ft_free(game->map);
+		ft_exit();
+	}
+}
+
+void	check_map(t_data *game)
+{
+	game->coinsnum = 0;
+	game->playernum = 0;
+	game->goalnum = 0;
+	game->coinscheck = 0;
+	game->goalscheck = 0;
+	count_rows(game);
+	fill_map(game);
+	check_map_components(game);
+	fill_mapchecker(game);
+	check_mapchecker(game, game->rows, game->cols);
+	check_map_path(game);
+	ft_freeint(game->mapchecker, game->rows);
 }

@@ -6,14 +6,14 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 18:46:32 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/10/05 13:37:41 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/22 12:15:02 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 #include <stdio.h>
 
 static int	ft_len(int n)
-{	
+{
 	int	nb;
 	int	len;
 
