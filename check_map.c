@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 22:49:01 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/22 17:30:20 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/23 19:04:27 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,11 @@ void	fill_map(t_data *game)
 	game->map[i] = line;
 }
 
-void	count_elements(char *mapi, t_data *game, int i)
+void	count_elements(char *mapi, t_data *game, int j)
 {
-	int	j;
+	int	i;
 
-	j = 0;
+	i = 0;
 	while (mapi[i])
 	{
 		if (mapi[i] == 'C')
@@ -229,36 +229,44 @@ void	ft_freeint(int	**mapchecker, int rows)
 
 void	fill_mapchecker(t_data *game)
 {
-	int		i;
+	int	i;
+	int	j;
 
-	game->mapchecker = malloc(sizeof(char *) * (game->rows));
+	game->mapchecker = malloc(sizeof(char *) * (game->rows + 1));
 	if (!game->mapchecker)
 	{
 		ft_free(game->map);
 		ft_exit();
 	}
 	i = 0;
-	while (i++ < game->cols)
+	while (i < game->rows)
 	{
-		game->mapchecker[i] =ft_calloc((game->cols), sizeof(char));
+		game->mapchecker[i] = malloc((game->cols + 1) *  sizeof(char));
 		if (!game->mapchecker[i])
 		{
-			ft_freeint(game->mapchecker, game->rows);
+			ft_free(game->mapchecker);
 			ft_free(game->map);
 			ft_exit();
 		}
+		j = -1;
+		while (j++ < game->cols)
+			game->mapchecker[i][j] = game->map[i][j];
+		i++;
 	}
+	game->mapchecker[i] = NULL;
 }
 
 void	check_mapchecker(t_data *game, int row, int col)
 {
-	if (game->map[row][col] == 1 || game->mapchecker[row][col] == 1)
+	if (game->map[row][col] == '1' || game->mapchecker[row][col] == '1')
+		return;
+	if (!game->map[row][col])
 		return;
 	if (game->map[row][col] == 'C')
 		game->coinscheck++;
 	if (game->map[row][col] == 'E')
 		game->goalscheck++;
-	game->mapchecker[row][col] = 1;
+	game->mapchecker[row][col] = '1';
 	check_mapchecker(game, row + 1, col);
 	check_mapchecker(game, row - 1, col);
 	check_mapchecker(game, row, col + 1);
@@ -269,13 +277,13 @@ void	check_map_path(t_data *game)
 {
 	if (game->goalscheck != game->goalnum)
 	{
-		ft_freeint(game->mapchecker, game->rows);
+		ft_free(game->mapchecker);
 		ft_free(game->map);
 		ft_exit();
 	}
 	if (game->coinscheck != game->coinsnum)
 	{
-		ft_freeint(game->mapchecker, game->rows);
+		ft_free(game->mapchecker);
 		ft_free(game->map);
 		ft_exit();
 	}
@@ -292,7 +300,8 @@ void	check_map(t_data *game)
 	fill_map(game);
 	check_map_components(game);
 	fill_mapchecker(game);
-	check_mapchecker(game, game->rows, game->cols);
+	check_mapchecker(game, game->playerx, game->playery);
+	print_map(game->mapchecker);
 	check_map_path(game);
-	ft_freeint(game->mapchecker, game->rows);
+	ft_free(game->mapchecker);
 }

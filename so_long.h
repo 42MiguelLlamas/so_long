@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 12:01:59 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/22 17:06:56 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/23 17:24:20 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_data{
 	int		cols;
 	int		rows;
 	char	**map;
-	int		**mapchecker;
+	char	**mapchecker;
 	int		coinsnum;
 	int		goalnum;
 	int		playernum;

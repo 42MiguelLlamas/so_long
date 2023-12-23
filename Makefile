@@ -6,14 +6,14 @@
 #    By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/19 17:20:49 by mllamas-          #+#    #+#              #
-#    Updated: 2023/12/20 01:02:05 by mllamas-         ###   ########.fr        #
+#    Updated: 2023/12/23 16:39:04 by mllamas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
 SRCS = main.c check_map.c gnl/get_next_line.c gnl/get_next_line_utils.c
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 CC = cc
 LIBFT = libft/libft.a
 
