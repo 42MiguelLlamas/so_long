@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 12:01:59 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/23 17:24:20 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/23 21:07:16 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ typedef struct s_data{
 	int		coinscheck;
 	void	*mlx;
 	void	*win;
+	void	*player;
+	void	*coins;
+	void	*goal;
+	void	*ground;
+	void	*wall;
+	int		width;
+	int		height;
 }				t_data;
 
 void	ft_exit(void);

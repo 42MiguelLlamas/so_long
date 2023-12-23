@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:59:51 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/23 17:24:16 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/23 21:07:14 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "so_long.h"
@@ -77,10 +77,17 @@ int	main(int argc, char **argv)
 		ft_exit();
 	if (strncmp(".ber", argv[1] + ft_strlen(argv[1]) - 4, 4) != 0)
 		ft_exit();
-	game.mapname = argv[1];	
+	game.mapname = argv[1];
+	game.height = 128;
+	game.width = 128;
 	check_map(&game);
 	game.mlx = mlx_init();
+	game.wall = mlx_xpm_file_to_image(game.mlx, "sprites/croisant1.xpm", &game.width, &game.height);
+	game.player = mlx_xpm_file_to_image(game.mlx, "sprites/llados1.xpm", &game.width, &game.height);
 	game.win = mlx_new_window(game.mlx, 1920, 1080, "tan_largo");
+	mlx_put_image_to_window(game.mlx, game.win, game.player, 0, 0);
+	mlx_put_image_to_window(game.mlx, game.win, game.wall, 200, 200);
+	printf("%s\n", "aqui");
 	mlx_key_hook(game.win, closfe, &game);
 	mlx_hook(game.win, ON_DESTROY, 0L, (void *)destroy_hook, &game);
 	mlx_loop(game.mlx);
