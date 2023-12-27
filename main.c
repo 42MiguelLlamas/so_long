@@ -6,55 +6,18 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:59:51 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/23 21:07:14 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/27 15:30:11 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "so_long.h"
 
-/*void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+int	key_hook(int keycode, t_data *game)
 {
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
-int	main(void)
-{
-	void	*mlx;
-	void	*mlx_win;
-	t_data	img;
-	int		i;
-	int		j;
-
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
-	img.img = mlx_new_image(mlx, 1920, 1080);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-								&img.endian);
-	i = 100;
-	while (i++ < 200)
+	if (keycode == 13)
 	{
-		j = 50;
-		while (j++ < 200)
-			my_mlx_pixel_put(&img, i, j, 0x00FF0000);
+		draw_element(game, game->playerx, game->playery, '1');
+		draw_element(game, game->playerx, game->playery - 1, 'P');
 	}
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-	mlx_loop(mlx);
-}*/
-
-enum {
-	ON_KEYDOWN = 2,
-	ON_KEYUP = 3,
-	ON_MOUSEDOWN = 4,
-	ON_MOUSEUP = 5,
-	ON_MOUSEMOVE = 6,
-	ON_EXPOSE = 12,
-	ON_DESTROY = 17
-};
-
-int	closfe(int keycode, t_data *game)
-{
 	if (keycode == 53)
 	{
 		mlx_destroy_window(game->mlx, game->win);
@@ -82,13 +45,8 @@ int	main(int argc, char **argv)
 	game.width = 128;
 	check_map(&game);
 	game.mlx = mlx_init();
-	game.wall = mlx_xpm_file_to_image(game.mlx, "sprites/croisant1.xpm", &game.width, &game.height);
-	game.player = mlx_xpm_file_to_image(game.mlx, "sprites/llados1.xpm", &game.width, &game.height);
-	game.win = mlx_new_window(game.mlx, 1920, 1080, "tan_largo");
-	mlx_put_image_to_window(game.mlx, game.win, game.player, 0, 0);
-	mlx_put_image_to_window(game.mlx, game.win, game.wall, 200, 200);
-	printf("%s\n", "aqui");
-	mlx_key_hook(game.win, closfe, &game);
-	mlx_hook(game.win, ON_DESTROY, 0L, (void *)destroy_hook, &game);
+	draw_map(&game);
+	mlx_key_hook(game.win, key_hook, &game);
+	mlx_hook(game.win, 17, 0L, (void *)destroy_hook, &game);
 	mlx_loop(game.mlx);
 }

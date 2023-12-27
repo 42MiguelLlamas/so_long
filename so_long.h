@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/22 12:01:59 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/23 21:07:16 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/27 15:18:00 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_data{
 	void	*mlx;
 	void	*win;
 	void	*player;
-	void	*coins;
+	void	*coin;
 	void	*goal;
 	void	*ground;
 	void	*wall;
@@ -50,5 +50,6 @@ typedef struct s_data{
 
 void	ft_exit(void);
 void	check_map(t_data *game);
-
+void	draw_map(t_data *game);
+void	draw_element(t_data *game, int row, int col, char   c);
 #endif

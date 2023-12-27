@@ -6,7 +6,7 @@
 /*   By: mllamas- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 22:49:01 by mllamas-          #+#    #+#             */
-/*   Updated: 2023/12/23 21:07:19 by mllamas-         ###   ########.fr       */
+/*   Updated: 2023/12/27 15:11:24 by mllamas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ void	check_map(t_data *game)
 	check_map_components(game);
 	fill_mapchecker(game);
 	check_mapchecker(game, game->playerx, game->playery);
-	print_map(game->mapchecker);
 	check_map_path(game);
+	print_map(game->map);
 	ft_free(game->mapchecker);
 }
